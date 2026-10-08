@@ -51,11 +51,11 @@ export const Header: React.FC = () => {
             </div>
 
             {/* Logo */}
-            <Link href="/" className="flex flex-col items-center sm:items-start group shrink-0">
-              <span className="font-serif text-2xl sm:text-3xl tracking-wider text-white group-hover:text-[#D4AF37] transition-colors font-bold whitespace-nowrap">
+            <Link href="/" className="flex flex-col items-start group shrink-0 min-w-0">
+              <span className="font-serif text-lg sm:text-2xl md:text-3xl tracking-wider text-white group-hover:text-[#D4AF37] transition-colors font-bold whitespace-nowrap">
                 OVERDOSE <span className="text-[#D4AF37]">PARFUMS</span>
               </span>
-              <span className="text-[9px] uppercase tracking-[0.25em] text-zinc-400 font-light -mt-1 whitespace-nowrap">
+              <span className="hidden sm:block text-[9px] uppercase tracking-[0.25em] text-zinc-400 font-light -mt-1 whitespace-nowrap">
                 Нішева парфумерія на розпив
               </span>
             </Link>
@@ -84,11 +84,11 @@ export const Header: React.FC = () => {
             <div className="flex items-center space-x-2 sm:space-x-4 shrink-0">
               {/* Phone contact */}
               <a
-                href="tel:+380971234567"
+                href="tel:+380987979790"
                 className="hidden 2xl:flex items-center gap-2 text-xs text-zinc-300 hover:text-[#D4AF37] transition-colors border border-[#27272A] px-3 py-1.5 rounded-full hover:border-[#D4AF37]/50 whitespace-nowrap"
               >
                 <Phone className="w-3.5 h-3.5 text-[#D4AF37]" />
-                <span>+380 (97) 123-45-67</span>
+                <span>+380 (98) 797-97-90</span>
               </a>
 
               {/* Quick Catalog Search */}

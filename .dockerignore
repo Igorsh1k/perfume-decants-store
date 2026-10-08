@@ -1,0 +1,10 @@
+node_modules
+.next
+.git
+.gitignore
+.idea
+*.md
+deploy.sh
+start.bat
+nginx.conf
+ecosystem.config.js

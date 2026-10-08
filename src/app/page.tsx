@@ -28,24 +28,24 @@ export default function HomePage() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center pt-12 pb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1A1A1E]/80 backdrop-blur-md border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-semibold uppercase tracking-widest mb-6">
-            <Sparkles className="w-4 h-4" />
+        <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center pt-12 pb-16">
+          <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-[#1A1A1E]/80 backdrop-blur-md border border-[#D4AF37]/40 text-[#D4AF37] text-xs font-semibold uppercase tracking-widest mb-6">
+            <Sparkles className="w-3.5 h-3.5 shrink-0" />
             <span>Онлайн-ательє декантів в Україні</span>
           </div>
 
-          <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-tight">
-            Оригінальна нішева парфумерія <br />
+          <h1 className="font-serif text-3xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-white leading-tight">
+            Оригінальна нішева парфумерія{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C5A880] via-[#D4AF37] to-[#E6C687]">
               на розпив (деканти)
             </span>
           </h1>
 
-          <p className="mt-6 text-base sm:text-lg text-zinc-300 max-w-2xl mx-auto leading-relaxed font-light">
+          <p className="mt-6 text-sm sm:text-lg text-zinc-300 max-w-2xl mx-auto leading-relaxed font-light px-2">
             Відкрийте для себе світ вишуканих нішевих та люксових ароматів у компактних атомайзерах від 1 мл. Знайомтесь з легендарними парфумами без витрат на повний флакон.
           </p>
 
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 px-2">
             <Link
               href="/catalog"
               className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[#C5A880] via-[#D4AF37] to-[#C5A880] text-[#0B0B0C] font-bold text-sm uppercase tracking-widest rounded-xl hover:brightness-110 transition-all shadow-xl shadow-[#D4AF37]/15 flex items-center justify-center gap-2 group"
@@ -63,21 +63,21 @@ export default function HomePage() {
           </div>
 
           {/* Quick Badges */}
-          <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8 border-t border-zinc-800/80 text-xs">
+          <div className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto pt-8 border-t border-zinc-800/80 text-xs">
             <div className="flex items-center justify-center gap-2 text-zinc-300">
-              <ShieldCheck className="w-4 h-4 text-[#D4AF37]" />
+              <ShieldCheck className="w-4 h-4 text-[#D4AF37] shrink-0" />
               <span>100% Оригінальність</span>
             </div>
             <div className="flex items-center justify-center gap-2 text-zinc-300">
-              <Layers className="w-4 h-4 text-[#D4AF37]" />
-              <span>Об'єми 1, 2, 5, 10 мл</span>
+              <Layers className="w-4 h-4 text-[#D4AF37] shrink-0" />
+              <span>Об&apos;єми 1, 2, 5, 10 мл</span>
             </div>
             <div className="flex items-center justify-center gap-2 text-zinc-300">
-              <HeartHandshake className="w-4 h-4 text-[#D4AF37]" />
+              <HeartHandshake className="w-4 h-4 text-[#D4AF37] shrink-0" />
               <span>Відправка Новою Поштою</span>
             </div>
             <div className="flex items-center justify-center gap-2 text-zinc-300">
-              <Award className="w-4 h-4 text-[#D4AF37]" />
+              <Award className="w-4 h-4 text-[#D4AF37] shrink-0" />
               <span>Понад 50+ нішевих ароматів</span>
             </div>
           </div>

@@ -2,6 +2,11 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { CartItem } from '@/types/product';
+import {
+  registerUser as registerUserStorage,
+  validateCredentials,
+  type RegisteredUser,
+} from '@/utils/userStorage';
 
 export interface UserOrder {
   id: string;
@@ -37,7 +42,13 @@ interface AuthContextType {
   openAuthModal: () => void;
   closeAuthModal: () => void;
   loginWithGoogle: () => void;
-  loginWithEmail: (email: string, pass: string) => void;
+  loginWithEmail: (email: string, pass: string) => Promise<{ success: boolean; error?: string }>;
+  registerUser: (data: {
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+  }) => Promise<{ success: boolean; error?: string }>;
   loginAsAdminWithCredentials: (email: string, pass: string) => boolean;
   logout: () => void;
   addOrderToHistory: (order: UserOrder) => void;
@@ -53,7 +64,7 @@ export const ADMIN_ACCOUNTS = [
     email: 'admin@overdoseparfums.com.ua',
     password: 'admin12345',
     name: 'Головний Адміністратор Overdose Parfums',
-    phone: '+380 (97) 123-45-67',
+    phone: '+380 (98) 797-97-90',
   },
   {
     email: 'igorkrasavshuk@gmail.com',
@@ -153,14 +164,63 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     closeAuthModal();
   };
 
-  const loginWithEmail = (email: string) => {
+  const loginWithEmail = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    // Check admin accounts first
+    const adminMatch = ADMIN_ACCOUNTS.find(
+      (a) => a.email.toLowerCase() === email.trim().toLowerCase() && a.password === password
+    );
+    if (adminMatch) {
+      loginAsAdminWithCredentials(email, password);
+      return { success: true };
+    }
+
+    // Check registered users
+    const result = await validateCredentials(email, password);
+    if (!result.valid || !result.user) {
+      return { success: false, error: result.error || 'Невірний email або пароль' };
+    }
+
     setUser({
-      ...CLIENT_DEMO_USER,
-      email,
-      name: email.split('@')[0],
+      id: result.user.id,
+      name: result.user.name,
+      email: result.user.email,
+      phone: result.user.phone,
       role: 'client',
+      bonuses: 0,
+      savedCity: '',
+      savedBranch: '',
+      orders: [],
     });
     closeAuthModal();
+    return { success: true };
+  };
+
+  const registerUser = async (data: {
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+  }): Promise<{ success: boolean; error?: string }> => {
+    const result = await registerUserStorage(data);
+    if (!result.success) {
+      return { success: false, error: result.error };
+    }
+
+    // Auto-login after registration
+    const registered = result.user!;
+    setUser({
+      id: registered.id,
+      name: registered.name,
+      email: registered.email,
+      phone: registered.phone,
+      role: 'client',
+      bonuses: 0,
+      savedCity: '',
+      savedBranch: '',
+      orders: [],
+    });
+    closeAuthModal();
+    return { success: true };
   };
 
   const loginAsAdminWithCredentials = (email: string, pass: string): boolean => {
@@ -211,6 +271,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         closeAuthModal,
         loginWithGoogle,
         loginWithEmail,
+        registerUser,
         loginAsAdminWithCredentials,
         logout,
         addOrderToHistory,

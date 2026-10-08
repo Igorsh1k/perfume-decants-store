@@ -20,6 +20,13 @@ const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+const TikTokIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg {...props} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z" />
+  </svg>
+);
+
+
 export const Footer: React.FC = () => {
   return (
     <footer className="bg-[#0A0A0B] text-zinc-300 border-t border-[#27272A] pt-16 pb-8">
@@ -72,7 +79,7 @@ export const Footer: React.FC = () => {
             </p>
             <div className="flex items-center space-x-3 pt-2">
               <a
-                href="https://instagram.com"
+                href="https://instagram.com/overdose_parfum"
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 rounded-full bg-[#1A1A1E] border border-[#27272A] flex items-center justify-center text-zinc-300 hover:text-[#D4AF37] hover:border-[#D4AF37] transition-all"
@@ -81,20 +88,29 @@ export const Footer: React.FC = () => {
                 <InstagramIcon className="w-4 h-4" />
               </a>
               <a
-                href="viber://chat?number=%2B380971234567"
+                href="viber://chat?number=%2B380987979790"
                 className="w-9 h-9 rounded-full bg-[#1A1A1E] border border-[#27272A] flex items-center justify-center text-zinc-300 hover:text-[#D4AF37] hover:border-[#D4AF37] transition-all"
                 title="Viber"
               >
                 <MessageCircle className="w-4 h-4" />
               </a>
               <a
-                href="https://t.me"
+                href="https://t.me/overdose_parfum"
                 target="_blank"
                 rel="noreferrer"
                 className="w-9 h-9 rounded-full bg-[#1A1A1E] border border-[#27272A] flex items-center justify-center text-zinc-300 hover:text-[#D4AF37] hover:border-[#D4AF37] transition-all"
                 title="Telegram"
               >
                 <Send className="w-4 h-4" />
+              </a>
+              <a
+                href="https://tiktok.com/@overdose_parfum"
+                target="_blank"
+                rel="noreferrer"
+                className="w-9 h-9 rounded-full bg-[#1A1A1E] border border-[#27272A] flex items-center justify-center text-zinc-300 hover:text-[#D4AF37] hover:border-[#D4AF37] transition-all"
+                title="TikTok"
+              >
+                <TikTokIcon className="w-4 h-4" />
               </a>
             </div>
           </div>
@@ -175,14 +191,25 @@ export const Footer: React.FC = () => {
             <ul className="space-y-3 text-xs">
               <li className="flex items-start gap-3">
                 <Phone className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
-                <a href="tel:+380971234567" className="hover:text-white font-mono">
-                  +380 (97) 123-45-67
+                <a href="tel:+380987979790" className="hover:text-white font-mono">
+                  +380 (98) 797-97-90
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
                 <a href="mailto:info@overdoseparfums.com.ua" className="hover:text-white">
                   info@overdoseparfums.com.ua
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <TikTokIcon className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
+                <a
+                  href="https://tiktok.com/@overdose_parfum"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-white"
+                >
+                  @overdose_parfum
                 </a>
               </li>
               <li className="flex items-start gap-3">

@@ -30,7 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="uk" className={`${playfair.variable} ${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#0B0B0C] text-white font-sans selection:bg-[#D4AF37] selection:text-[#0B0B0C]">
+      <body className="min-h-full flex flex-col bg-[#0B0B0C] text-white font-sans selection:bg-[#D4AF37] selection:text-[#0B0B0C] overflow-x-hidden">
         <AuthProvider>
           <CartProvider>
             <Header />
