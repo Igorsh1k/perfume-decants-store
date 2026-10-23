@@ -1,12 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Phone, Mail, Lock, User, AlertCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { X, Phone, Mail, Lock, User, AlertCircle, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 type AuthTab = 'login' | 'register';
 
 export const AuthModal: React.FC = () => {
+  const router = useRouter();
   const { isAuthModalOpen, closeAuthModal, loginWithGoogle, loginWithEmail, registerUser } = useAuth();
 
   const [tab, setTab] = useState<AuthTab>('login');
@@ -68,9 +70,18 @@ export const AuthModal: React.FC = () => {
     setLoginLoading(false);
 
     if (!result.success) {
-      setLoginError(result.error || 'Помилка входу');
+      if (result.notFound) {
+        // Email not registered → suggest registration, pre-fill email
+        setRegEmail(loginEmail);
+        switchTab('register');
+      } else {
+        setLoginError(result.error || 'Помилка входу');
+      }
     } else {
       resetForms();
+      if (result.isAdmin) {
+        router.push('/admin');
+      }
     }
   };
 

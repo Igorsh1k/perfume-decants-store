@@ -42,7 +42,7 @@ interface AuthContextType {
   openAuthModal: () => void;
   closeAuthModal: () => void;
   loginWithGoogle: () => void;
-  loginWithEmail: (email: string, pass: string) => Promise<{ success: boolean; error?: string }>;
+  loginWithEmail: (email: string, pass: string) => Promise<{ success: boolean; error?: string; isAdmin?: boolean; notFound?: boolean }>;
   registerUser: (data: {
     name: string;
     email: string;
@@ -164,20 +164,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     closeAuthModal();
   };
 
-  const loginWithEmail = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+  const loginWithEmail = async (email: string, password: string): Promise<{ success: boolean; error?: string; isAdmin?: boolean; notFound?: boolean }> => {
     // Check admin accounts first
     const adminMatch = ADMIN_ACCOUNTS.find(
       (a) => a.email.toLowerCase() === email.trim().toLowerCase() && a.password === password
     );
     if (adminMatch) {
       loginAsAdminWithCredentials(email, password);
-      return { success: true };
+      return { success: true, isAdmin: true };
     }
 
     // Check registered users
     const result = await validateCredentials(email, password);
     if (!result.valid || !result.user) {
-      return { success: false, error: result.error || 'Невірний email або пароль' };
+      // Distinguish: email not found vs wrong password
+      const notFound = result.error === 'Користувача з таким email не знайдено';
+      return { success: false, error: result.error || 'Невірний email або пароль', notFound };
     }
 
     setUser({
@@ -192,7 +194,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       orders: [],
     });
     closeAuthModal();
-    return { success: true };
+    return { success: true, isAdmin: false };
   };
 
   const registerUser = async (data: {
