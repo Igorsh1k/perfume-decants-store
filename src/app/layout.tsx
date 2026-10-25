@@ -17,7 +17,7 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const SITE_URL = 'https://overdoseparfums.com.ua';
+const SITE_URL = 'https://www.overdoseparfums.com.ua';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

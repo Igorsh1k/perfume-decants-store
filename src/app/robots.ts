@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin', '/account', '/api/'],
       },
     ],
-    sitemap: 'https://overdoseparfums.com.ua/sitemap.xml',
-    host: 'https://overdoseparfums.com.ua',
+    sitemap: 'https://www.overdoseparfums.com.ua/sitemap.xml',
+    host: 'https://www.overdoseparfums.com.ua',
   };
 }

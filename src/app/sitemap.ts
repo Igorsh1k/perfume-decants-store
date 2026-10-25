@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-const SITE_URL = 'https://overdoseparfums.com.ua';
+const SITE_URL = 'https://www.overdoseparfums.com.ua';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
