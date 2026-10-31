@@ -104,7 +104,7 @@ export default function CartPage() {
 
   const currentBranch = BRANCHES.find((b) => b.id === selectedBranchId) || filteredBranches[0] || BRANCHES[0];
 
-  const handleConfirmOrder = () => {
+  const handleConfirmOrder = async () => {
     const generatedOrderId = 'OVERDOSE-' + Math.floor(100000 + Math.random() * 900000);
     const fullName = `${lastName} ${firstName} ${middleName}`.trim();
     const branchText = deliveryType === 'courier' ? courierAddress : currentBranch?.address || 'Відділення №1';
@@ -122,7 +122,7 @@ export default function CartPage() {
     setConfirmedOrderDetails(orderData);
 
     // Save to central Admin order storage for live analytics & admin tracking
-    addAdminOrder({
+    await addAdminOrder({
       id: 'ord-' + Date.now(),
       orderNumber: generatedOrderId,
       customerName: fullName,

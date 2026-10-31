@@ -50,23 +50,27 @@ export default function AdminPage() {
   ]);
 
   useEffect(() => {
-    setProducts(getStoredProducts());
-    setOrders(getStoredOrders());
+    const load = async () => {
+      const [prods, ords] = await Promise.all([getStoredProducts(), getStoredOrders()]);
+      setProducts(prods);
+      setOrders(ords);
+    };
+    load();
   }, []);
 
-  const handleUpdateOrderStatus = (orderId: string, newStatus: AdminOrder['status'], currentTtn?: string) => {
-    const updated = updateOrderStatus(orderId, newStatus, currentTtn);
+  const handleUpdateOrderStatus = async (orderId: string, newStatus: AdminOrder['status'], currentTtn?: string) => {
+    const updated = await updateOrderStatus(orderId, newStatus, currentTtn);
     setOrders(updated);
   };
 
-  const handleUpdateOrderTtn = (orderId: string, newTtn: string, currentStatus: AdminOrder['status']) => {
-    const updated = updateOrderStatus(orderId, currentStatus, newTtn);
+  const handleUpdateOrderTtn = async (orderId: string, newTtn: string, currentStatus: AdminOrder['status']) => {
+    const updated = await updateOrderStatus(orderId, currentStatus, newTtn);
     setOrders(updated);
   };
 
-  const handleDeleteAdminOrder = (orderId: string) => {
+  const handleDeleteAdminOrder = async (orderId: string) => {
     if (confirm('Ви дійсно бажаєте видалити це замовлення?')) {
-      const updated = deleteAdminOrder(orderId);
+      const updated = await deleteAdminOrder(orderId);
       setOrders(updated);
     }
   };
@@ -201,14 +205,14 @@ export default function AdminPage() {
     setIsProductModalOpen(true);
   };
 
-  const handleDeleteProduct = (id: string) => {
+  const handleDeleteProduct = async (id: string) => {
     if (confirm('Ви дійсно бажаєте видалити цей товар з каталогу?')) {
-      const updated = deleteProduct(id);
+      const updated = await deleteProduct(id);
       setProducts(updated);
     }
   };
 
-  const handleSaveProduct = (e: React.FormEvent) => {
+  const handleSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formName.trim() || !formBrand.trim()) return;
 
@@ -239,9 +243,9 @@ export default function AdminPage() {
 
     let updatedList: Product[];
     if (editingProduct) {
-      updatedList = updateProduct(productData);
+      updatedList = await updateProduct(productData);
     } else {
-      updatedList = addProduct(productData);
+      updatedList = await addProduct(productData);
     }
 
     setProducts(updatedList);

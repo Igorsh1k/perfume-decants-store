@@ -1,3 +1,5 @@
+import { supabase } from '@/lib/supabase';
+
 export interface AdminOrder {
   id: string;
   orderNumber: string;
@@ -10,82 +12,91 @@ export interface AdminOrder {
   settlement: string;
   branch: string;
   itemsCount?: number;
+  items?: unknown[];
 }
 
-export const INITIAL_ADMIN_ORDERS: AdminOrder[] = [
-  {
-    id: 'ord-101',
-    orderNumber: 'OVERDOSE-849201',
-    customerName: 'Шургалюк Ігор Васильович',
-    phone: '+38 (096) 559 81 97',
-    date: '28.09.2026',
-    total: 1557,
-    status: 'Відправлено',
-    ttn: '20450912839120',
-    settlement: 'с. Поляниця (Івано-Франківська обл. Яремче р.)',
-    branch: 'Відділення №1: участок Щивки, буд.1, приміщення 5',
-    itemsCount: 2,
-  },
-  {
-    id: 'ord-102',
-    orderNumber: 'OVERDOSE-849202',
-    customerName: 'Коваль Олена Петрівна',
-    phone: '+380971234567',
-    date: '28.09.2026',
-    total: 2140,
-    status: 'Обробляється',
-    settlement: 'м. Київ',
-    branch: 'Відділення №15: вул. Малопідвальна, 12',
-    itemsCount: 3,
-  },
-];
+// ─── helpers ──────────────────────────────────────────────────────────────────
 
-const STORAGE_KEY = 'overdose_parfums_admin_orders';
+function rowToOrder(row: Record<string, unknown>): AdminOrder {
+  return {
+    id: row.id as string,
+    orderNumber: row.order_number as string,
+    customerName: row.customer_name as string,
+    phone: row.phone as string,
+    date: row.date as string,
+    total: row.total as number,
+    status: row.status as AdminOrder['status'],
+    ttn: (row.ttn as string) || '',
+    settlement: (row.settlement as string) || '',
+    branch: (row.branch as string) || '',
+    itemsCount: (row.items_count as number) || 1,
+    items: (row.items as unknown[]) || [],
+  };
+}
 
-export function getStoredOrders(): AdminOrder[] {
-  if (typeof window === 'undefined') {
-    return INITIAL_ADMIN_ORDERS;
+// ─── Public API ───────────────────────────────────────────────────────────────
+
+export async function getStoredOrders(): Promise<AdminOrder[]> {
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error || !data) {
+    console.error('getStoredOrders error:', error);
+    return [];
   }
 
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_ADMIN_ORDERS));
-      return INITIAL_ADMIN_ORDERS;
-    }
-    return JSON.parse(saved);
-  } catch {
-    return INITIAL_ADMIN_ORDERS;
-  }
+  return data.map(rowToOrder);
 }
 
-export function saveOrders(orders: AdminOrder[]): void {
-  if (typeof window !== 'undefined') {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
-    } catch (e) {
-      console.error('Failed to save orders to localStorage', e);
-    }
-  }
+export async function addAdminOrder(order: AdminOrder): Promise<AdminOrder[]> {
+  const { error } = await supabase.from('orders').insert({
+    id: order.id,
+    order_number: order.orderNumber,
+    customer_name: order.customerName,
+    phone: order.phone,
+    date: order.date,
+    total: order.total,
+    status: order.status,
+    ttn: order.ttn || '',
+    settlement: order.settlement,
+    branch: order.branch,
+    items_count: order.itemsCount || 1,
+    items: order.items || [],
+  });
+
+  if (error) console.error('addAdminOrder error:', error);
+  return getStoredOrders();
 }
 
-export function addAdminOrder(order: AdminOrder): AdminOrder[] {
-  const current = getStoredOrders();
-  const updated = [order, ...current];
-  saveOrders(updated);
-  return updated;
+export async function updateOrderStatus(
+  orderId: string,
+  newStatus: AdminOrder['status'],
+  ttn?: string,
+): Promise<AdminOrder[]> {
+  const updateData: Record<string, unknown> = { status: newStatus };
+  if (ttn !== undefined) updateData.ttn = ttn;
+
+  const { error } = await supabase
+    .from('orders')
+    .update(updateData)
+    .eq('id', orderId);
+
+  if (error) console.error('updateOrderStatus error:', error);
+  return getStoredOrders();
 }
 
-export function updateOrderStatus(orderId: string, newStatus: AdminOrder['status'], ttn?: string): AdminOrder[] {
-  const current = getStoredOrders();
-  const updated = current.map((o) => (o.id === orderId ? { ...o, status: newStatus, ...(ttn !== undefined ? { ttn } : {}) } : o));
-  saveOrders(updated);
-  return updated;
+export async function deleteAdminOrder(orderId: string): Promise<AdminOrder[]> {
+  const { error } = await supabase
+    .from('orders')
+    .delete()
+    .eq('id', orderId);
+
+  if (error) console.error('deleteAdminOrder error:', error);
+  return getStoredOrders();
 }
 
-export function deleteAdminOrder(orderId: string): AdminOrder[] {
-  const current = getStoredOrders();
-  const updated = current.filter((o) => o.id !== orderId);
-  saveOrders(updated);
-  return updated;
-}
+// Legacy sync stubs kept for backward compat (unused but avoids TS errors)
+export const INITIAL_ADMIN_ORDERS: AdminOrder[] = [];
+export function saveOrders(_orders: AdminOrder[]): void {}

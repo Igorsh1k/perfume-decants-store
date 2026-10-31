@@ -18,7 +18,7 @@ export default function ProductDetailPage() {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    setProducts(getStoredProducts());
+    getStoredProducts().then(setProducts);
   }, []);
 
   const product = products.find((p) => p.id === productId);

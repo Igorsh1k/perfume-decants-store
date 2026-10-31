@@ -1,15 +1,21 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Sparkles, ShieldCheck, HeartHandshake, Layers, Award, Star } from 'lucide-react';
-import { PRODUCTS } from '@/data/products';
 import { ProductCard } from '@/components/ProductCard';
+import { getStoredProducts } from '@/utils/productStorage';
+import { Product } from '@/types/product';
 
 export default function HomePage() {
-  // Get Top Hits
-  const hitProducts = PRODUCTS.filter((p) => p.badges?.includes('hit')).slice(0, 6);
+  const [hitProducts, setHitProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    getStoredProducts().then((all) => {
+      setHitProducts(all.filter((p) => p.badges?.includes('hit')).slice(0, 6));
+    });
+  }, []);
 
   return (
     <div className="space-y-20 pb-16">

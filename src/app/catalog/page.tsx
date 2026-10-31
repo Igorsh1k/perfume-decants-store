@@ -12,9 +12,10 @@ function CatalogContent() {
   const categoryParam = searchParams.get('category') as ProductCategory | null;
 
   const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setProducts(getStoredProducts());
+    getStoredProducts().then((p) => { setProducts(p); setLoading(false); });
   }, []);
 
   // Filter States
