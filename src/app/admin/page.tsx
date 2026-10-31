@@ -39,6 +39,7 @@ export default function AdminPage() {
   const [formHeartNotes, setFormHeartNotes] = useState('Бурштинове дерево, Амбра');
   const [formBaseNotes, setFormBaseNotes] = useState('Ялинова смола, Кедр');
   const [formBadges, setFormBadges] = useState<('hit' | 'new' | 'sale')[]>(['hit']);
+  const [imageUploading, setImageUploading] = useState(false);
 
   // Volume options state
   const [formVolumes, setFormVolumes] = useState<VolumeOption[]>([
@@ -245,6 +246,36 @@ export default function AdminPage() {
 
     setProducts(updatedList);
     setIsProductModalOpen(false);
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Будь ласка, оберіть файл зображення (JPG, PNG, WEBP)');
+      return;
+    }
+
+    // Validate size — max 2MB
+    if (file.size > 2 * 1024 * 1024) {
+      alert('Розмір фото не повинен перевищувати 2 МБ. Стисніть зображення і спробуйте знову.');
+      return;
+    }
+
+    setImageUploading(true);
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const base64 = ev.target?.result as string;
+      setFormImage(base64);
+      setImageUploading(false);
+    };
+    reader.onerror = () => {
+      alert('Помилка читання файлу. Спробуйте ще раз.');
+      setImageUploading(false);
+    };
+    reader.readAsDataURL(file);
   };
 
   // Filtered products list
@@ -733,15 +764,57 @@ export default function AdminPage() {
                 </div>
               </div>
 
+              {/* Image Upload */}
               <div>
-                <label className="text-zinc-300 block mb-1">URL Фотографії товару</label>
-                <input
-                  type="text"
-                  placeholder="/images/baccarat_rouge.jpg або https://..."
-                  value={formImage}
-                  onChange={(e) => setFormImage(e.target.value)}
-                  className="w-full bg-[#1A1A1E] border border-[#3F3F46] rounded-xl px-3.5 py-2.5 text-white outline-none focus:border-[#D4AF37] font-mono"
-                />
+                <label className="text-zinc-300 block mb-2">Фото товару</label>
+                <div className="flex gap-3 items-start">
+                  {/* Preview */}
+                  <div className="relative w-20 h-20 rounded-xl border border-[#3F3F46] bg-[#1A1A1E] shrink-0 overflow-hidden flex items-center justify-center">
+                    {formImage ? (
+                      <img
+                        src={formImage}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                      />
+                    ) : (
+                      <span className="text-zinc-600 text-[10px] text-center px-1">Немає фото</span>
+                    )}
+                    {imageUploading && (
+                      <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+                        <div className="w-5 h-5 border-2 border-[#D4AF37] border-t-transparent rounded-full animate-spin" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Controls */}
+                  <div className="flex-1 space-y-2">
+                    {/* File picker button */}
+                    <label className="flex items-center gap-2 px-4 py-2.5 bg-[#1A1A1E] border border-[#3F3F46] hover:border-[#D4AF37] rounded-xl cursor-pointer transition-colors text-zinc-300 hover:text-white text-xs font-semibold w-full justify-center">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      {imageUploading ? 'Завантаження...' : 'Вибрати фото з комп\'ютера'}
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        className="hidden"
+                        onChange={handleImageUpload}
+                        disabled={imageUploading}
+                      />
+                    </label>
+
+                    {/* URL fallback */}
+                    <input
+                      type="text"
+                      placeholder="або вставте URL: https://..."
+                      value={formImage.startsWith('data:') ? '' : formImage}
+                      onChange={(e) => setFormImage(e.target.value)}
+                      className="w-full bg-[#1A1A1E] border border-[#3F3F46] rounded-xl px-3 py-2 text-white outline-none focus:border-[#D4AF37] font-mono text-[11px] placeholder:text-zinc-600"
+                    />
+                    <p className="text-[10px] text-zinc-500">Макс. розмір файлу: 2 МБ • JPG, PNG, WEBP</p>
+                  </div>
+                </div>
               </div>
 
               <div>
