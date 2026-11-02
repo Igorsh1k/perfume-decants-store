@@ -9,7 +9,7 @@ type AuthTab = 'login' | 'register';
 
 export const AuthModal: React.FC = () => {
   const router = useRouter();
-  const { isAuthModalOpen, closeAuthModal, loginWithGoogle, loginWithEmail, registerUser } = useAuth();
+  const { isAuthModalOpen, closeAuthModal, loginWithEmail, registerUser } = useAuth();
 
   const [tab, setTab] = useState<AuthTab>('login');
 
@@ -177,40 +177,9 @@ export const AuthModal: React.FC = () => {
         {/* ===================== LOGIN TAB ===================== */}
         {tab === 'login' && (
           <>
-            {/* Social Buttons */}
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                className="flex items-center justify-center gap-2 py-3 px-4 bg-[#3B5998] hover:bg-[#324B81] text-white text-xs font-bold rounded-xl transition-all shadow-md"
-              >
-                <span className="font-serif font-black text-sm">f</span>
-                <span>Facebook</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={loginWithGoogle}
-                className="flex items-center justify-center gap-2 py-3 px-4 bg-[#4285F4] hover:bg-[#3367D6] text-white text-xs font-bold rounded-xl transition-all shadow-md"
-              >
-                <div className="w-4 h-4 rounded-full bg-white text-[#4285F4] font-bold text-xs flex items-center justify-center">
-                  G
-                </div>
-                <span>Google</span>
-              </button>
-            </div>
-
-            <button
-              type="button"
-              onClick={loginWithGoogle}
-              className="w-full py-2.5 px-4 bg-[#1A1A1E] border border-[#3F3F46] hover:border-zinc-500 text-zinc-300 text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition-all"
-            >
-              <Phone className="w-3.5 h-3.5 text-[#D4AF37]" />
-              <span>Телефон</span>
-            </button>
-
             <div className="flex items-center gap-3 text-xs text-zinc-500 my-1">
               <span className="flex-1 h-px bg-[#27272A]" />
-              <span>або</span>
+              <span>Вхід через email та пароль</span>
               <span className="flex-1 h-px bg-[#27272A]" />
             </div>
 
